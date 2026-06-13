@@ -8,7 +8,9 @@ function getAllUsers(req, res) {
 // GET /api/users/:id
 function getUserById(req, res) {
   const id = req.params.id;
-  const user = users.find((u) => u.id === id);
+  console.log(id);
+  const user = users.find((u) => u.id == id);
+  console.log(user);
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -32,6 +34,7 @@ function createUser(req, res) {
   };
 
   users.push(newUser);
+  console.log(users);
   res.status(201).json(newUser);
 }
 
