@@ -19,6 +19,8 @@ function getUserById(req, res) {
   res.json(user);
 }
 
+
+
 // POST /api/users
 function createUser(req, res) {
   const { name, email } = req.body;
@@ -26,9 +28,13 @@ function createUser(req, res) {
   if (!name || !email) {
     return res.status(400).json({ error: "name and email are required" });
   }
+  const ids = users.map((u) => u.id);
+  console.log(ids);
+  const maxId = Math.max(...ids);
+  console.log(maxId);
 
   const newUser = {
-    id: users.length + 1,
+    id: maxId + 1,
     name,
     email,
   };
@@ -38,4 +44,22 @@ function createUser(req, res) {
   res.status(201).json(newUser);
 }
 
-module.exports = { getAllUsers, getUserById, createUser };
+function deleteUser(req, res){
+  const  id = Number(req.params.id);
+
+  if(id < 0){
+    return res.status(400).json({mesage:"id is not correct"})
+  }
+  console.log(id);
+  const index = users.findIndex((u) => u.id === id);
+  console.log(index);
+  if(index === -1){
+    return res.status(400).json({mesage:"index not present"})
+  }
+  users.splice(index, 1)
+  console.log(users);
+  return res.status(200).json(users);
+  
+}
+
+module.exports = { getAllUsers, getUserById, createUser, deleteUser };
