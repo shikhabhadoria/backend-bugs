@@ -8,17 +8,15 @@ function getAllUsers(req, res) {
 // GET /api/users/:id
 function getUserById(req, res) {
   const id = req.params.id;
-  console.log(id);
+  
   const user = users.find((u) => u.id == id);
-  console.log(user);
+  
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
   res.json(user);
 }
-
-
 
 // POST /api/users
 function createUser(req, res) {
