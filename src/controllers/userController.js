@@ -8,12 +8,13 @@ function getAllUsers(req, res) {
 // GET /api/users/:id
 function getUserById(req, res) {
   const id = req.params.id;
-  const user = users.find((u) => u.id === id);
+  
+  const user = users.find((u) => u.id == id);
+  
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
-
   res.json(user);
 }
 
@@ -24,9 +25,11 @@ function createUser(req, res) {
   if (!name || !email) {
     return res.status(400).json({ error: "name and email are required" });
   }
+  const ids = users.map((u) => u.id);
+  const maxId = Math.max(...ids);
 
   const newUser = {
-    id: users.length + 1,
+    id: maxId + 1,
     name,
     email,
   };
@@ -35,4 +38,19 @@ function createUser(req, res) {
   res.status(201).json(newUser);
 }
 
-module.exports = { getAllUsers, getUserById, createUser };
+function deleteUser(req, res){
+  const  id = Number(req.params.id);
+
+  if(id < 0){
+    return res.status(400).json({mesage:"id is not correct"})
+  }
+  const index = users.findIndex((u) => u.id === id);
+  if(index === -1){
+    return res.status(400).json({mesage:"index not present"})
+  }
+  users.splice(index, 1)
+  return res.status(200).json(users);
+
+}
+
+module.exports = { getAllUsers, getUserById, createUser, deleteUser };

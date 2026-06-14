@@ -8,10 +8,10 @@ function getAllTasks(req, res) {
 // GET /api/tasks/summaries
 // Returns a lightweight view: just id + title for every task.
 function getTaskSummaries(req, res) {
-  const summaries = tasks.map((t) => {
-    id: t.id;
-    title: t.title;
-  });
+  const summaries = tasks.map((t) => ({
+    id: t.id,
+    title: t.title
+  }));
 
   res.json(summaries);
 }
@@ -25,11 +25,10 @@ function updateTask(req, res) {
     return res.status(404).json({ error: "Task not found" });
   }
 
-  const updated = { ...task };
-  if (req.body.title !== undefined) updated.title = req.body.title;
-  if (req.body.completed !== undefined) updated.completed = req.body.completed;
-
-  res.json(updated);
+  if (req.body.title !== undefined) task.title = req.body.title;
+  if (req.body.completed !== undefined) task.completed = req.body.completed;
+  
+  res.json(task);
 }
 
 // DELETE /api/tasks/:id
@@ -40,8 +39,14 @@ function deleteTask(req, res) {
     return res.status(404).json({ error: "Task not found" });
   }
 
-  tasks.splice(id, 1);
-  res.json({ message: "Task deleted" });
+  const index = tasks.findIndex((t) => t.id === id);
+  if(index === -1){
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  tasks.splice(index, 1);
+  
+  res.json({ message: "Task deleted", "tasks":tasks });
 }
 
 module.exports = { getAllTasks, getTaskSummaries, updateTask, deleteTask };
