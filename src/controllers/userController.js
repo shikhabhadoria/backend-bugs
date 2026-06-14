@@ -15,7 +15,6 @@ function getUserById(req, res) {
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
-
   res.json(user);
 }
 
@@ -29,9 +28,7 @@ function createUser(req, res) {
     return res.status(400).json({ error: "name and email are required" });
   }
   const ids = users.map((u) => u.id);
-  console.log(ids);
   const maxId = Math.max(...ids);
-  console.log(maxId);
 
   const newUser = {
     id: maxId + 1,
@@ -40,7 +37,6 @@ function createUser(req, res) {
   };
 
   users.push(newUser);
-  console.log(users);
   res.status(201).json(newUser);
 }
 
@@ -50,16 +46,13 @@ function deleteUser(req, res){
   if(id < 0){
     return res.status(400).json({mesage:"id is not correct"})
   }
-  console.log(id);
   const index = users.findIndex((u) => u.id === id);
-  console.log(index);
   if(index === -1){
     return res.status(400).json({mesage:"index not present"})
   }
   users.splice(index, 1)
-  console.log(users);
   return res.status(200).json(users);
-  
+
 }
 
 module.exports = { getAllUsers, getUserById, createUser, deleteUser };

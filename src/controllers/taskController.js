@@ -27,7 +27,7 @@ function updateTask(req, res) {
 
   if (req.body.title !== undefined) task.title = req.body.title;
   if (req.body.completed !== undefined) task.completed = req.body.completed;
-  console.log(task);
+  
   res.json(task);
 }
 
@@ -44,10 +44,8 @@ function deleteTask(req, res) {
     return res.status(404).json({ error: "Task not found" });
   }
 
-  console.log(index);
-
   tasks.splice(index, 1);
-  console.log(tasks);
+  
   res.json({ message: "Task deleted", "tasks":tasks });
 }
 
